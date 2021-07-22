@@ -189,7 +189,7 @@ grid.arrange(p2a+theme(text=element_text(size=20)),p2b+theme(text=element_text(s
 dev.off()
 
 pdf("keyTechs_2_GAM_class.pdf",width=15,height=10)
-print(p2class)
+print(p2class+theme(text=element_text(size=20)))
 dev.off()
 ```
 
