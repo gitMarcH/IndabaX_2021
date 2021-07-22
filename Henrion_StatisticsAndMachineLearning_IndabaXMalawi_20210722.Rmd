@@ -138,7 +138,6 @@ p1class<- p0b +
 
 print(p1class+coord_fixed(ratio = 1))
 
-
 pdf("keyTechs_1_glm.pdf",width=30,height=10)
 grid.arrange(p1reg+theme(text=element_text(size=20)),p1class+theme(text=element_text(size=20)),ncol=2)
 dev.off()
@@ -172,12 +171,25 @@ p2b<-p0a +
   geom_line(data=newRegDat,mapping=aes(x=x,y=fit), color="blue", linetype="solid") +
   ggtitle("Restricted cubic spline (3 knots)")
 
+m2class<-glm(family="binomial",class~rcs(x,3)+rcs(y,3),data=classDat)
+newClassDat$pred2class<-predict(m2class,newdata=newClassDat,type="response")
+newClassDat$pred2classBin<-factor(ifelse(newClassDat$pred2class>0.5,"c2","c1"))
+
+p2class<- p0b +
+  geom_point(mapping=aes(x=x,y=y,col=pred2classBin),data=newClassDat,size=0.2,alpha=0.25) +
+  geom_contour(mapping=aes(x=x,y=y,z=pred2class),data=newClassDat,breaks=0.5,color="black",lwd=0.8) + 
+  ggtitle("GLM - logistic regression with RCS classification boundary")
 
 grid.arrange(p2a,p2b,ncol=2)
+print(p2class)
 
 
-pdf("keyTechs_2_GAM.pdf",width=30,height=10)
+pdf("keyTechs_2_GAM_reg.pdf",width=30,height=10)
 grid.arrange(p2a+theme(text=element_text(size=20)),p2b+theme(text=element_text(size=20)),ncol=2)
+dev.off()
+
+pdf("keyTechs_2_GAM_class.pdf",width=15,height=10)
+print(p2class)
 dev.off()
 ```
 
